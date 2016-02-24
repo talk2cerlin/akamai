@@ -12,12 +12,7 @@ class Akamai extends NetStorage implements AkamaiInterface
 
     public function __construct()
     {
-        //$this->client = new NetStorage();
-    }
-
-    public function dummy()
-    {
-        echo "Success </br>";
+        $this->client = new NetStorage();
     }
 
     public function dir($url)
