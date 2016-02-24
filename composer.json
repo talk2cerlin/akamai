@@ -1,0 +1,21 @@
+{
+    "name": "cerlin/akamai",
+    "description": "Akamai Netstorage Library",
+    "type": "Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cerlin",
+            "email": "cerlin@linkstreet.in"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Akamai\\": "src\\Akamai\\"
+        }
+    }
+}
