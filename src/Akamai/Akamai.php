@@ -5,6 +5,7 @@ namespace Akamai;
 use Akamai\Interfaces\AkamaiInterface;
 use Akamai\Exceptions\FileNotFoundException;
 use Akamai\Services\NetStorage;
+use Akamai\Facades\Config;
 
 class Akamai extends NetStorage implements AkamaiInterface
 {
@@ -12,6 +13,8 @@ class Akamai extends NetStorage implements AkamaiInterface
 
     public function __construct()
     {
+        // Making sure credentials are loaded
+        $this->init();
         $this->client = new NetStorage();
     }
 
@@ -39,6 +42,11 @@ class Akamai extends NetStorage implements AkamaiInterface
     {
         $response = $this->client->upload($filename, $this->readFileData($raw_file_loc));
         return $response;
+    }
+
+    private function init()
+    {
+        // Config::load();
     }
 
     private function readFileData($filename)

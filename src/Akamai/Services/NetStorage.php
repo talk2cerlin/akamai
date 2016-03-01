@@ -3,6 +3,7 @@
 namespace Akamai\Services;
 
 use Akamai\Services\AkamaiAuth;
+use Akamai\Facades\Config;
 
 /*
     Original Source of this class can be found in https://github.com/raben/Akamai
@@ -20,11 +21,11 @@ class NetStorage
 
     protected function __construct()
     {
-        $this->config = config('app.akamai');
-        $this->key = $this->config['key'];
-        $this->key_name = $this->config['key_name'];
-        $this->host = $this->config['host'];
-        $this->auth = new AkamaiAuth($this->key, $this->key_name, $this->version);
+        $this->config = Config::getAkamaiConfig();
+        $this->key = $this->config['AKA_FTP_KEY'];
+        $this->key_name = $this->config['AKA_FTP_KEYNAME'];
+        $this->host = $this->config['AKA_FTP_HOST'];
+        $this->auth = new AkamaiAuth($this->key, $this->key_name);
         // $this->version = $this->config->version;
     }
 

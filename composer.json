@@ -17,5 +17,8 @@
         "psr-4": {
             "Akamai\\": "src\\Akamai\\"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.0"
     }
 }

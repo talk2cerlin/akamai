@@ -1,4 +1,5 @@
 vendor
 index.php
 src/Akamai/.env
-
+.env
+.akamai
