@@ -33,15 +33,14 @@ class ConfigLoader
         $this->parser->required('AKA_FTP_HOST')->notEmpty();
         $this->parser->required('AKA_FTP_KEY')->notEmpty();
         $this->parser->required('AKA_FTP_KEYNAME')->notEmpty();
-        $this->parser->required('AKA_FTP_BASIC_URL')->notEmpty();
-        $this->parser->required('AKA_FTP_FOLDER')->notEmpty();
-        $this->parser->required('AKA_VERSION')->isInteger();
     }
 
-    public function get($key)
+    private function get($key)
     {
         return getenv($key);
     }
+
+    // public function setAkamaiC
 
     public function getAkamaiConfig()
     {
@@ -51,10 +50,7 @@ class ConfigLoader
         return [
             "AKA_FTP_HOST" => $this->get("AKA_FTP_HOST"),
             "AKA_FTP_KEY" => $this->get("AKA_FTP_KEY"),
-            "AKA_FTP_KEYNAME" => $this->get("AKA_FTP_KEYNAME"),
-            "AKA_FTP_BASIC_URL" => $this->get("AKA_FTP_BASIC_URL"),
-            "AKA_FTP_FOLDER" => $this->get("AKA_FTP_FOLDER"),
-            "AKA_VERSION" => $this->get("AKA_VERSION"),
+            "AKA_FTP_KEYNAME" => $this->get("AKA_FTP_KEYNAME")
         ];
     }
 }
