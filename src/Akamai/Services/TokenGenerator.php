@@ -17,7 +17,7 @@ use Config;
         <URL>?hdnea=<token>
 */
 
-class AkamaiTokenGeneration
+class TokenGenerator
 {
 
     protected $algo = '';
