@@ -109,12 +109,14 @@ class NetStorage
 
     protected function rmdir($url)
     {
-        $this->_updateAction('rmdir', $url);
+        $response_data = $this->_updateAction('rmdir', $url);
+        return ['data' => $response_data,'code' => $this->_last_status_code];
     }
 
     protected function delete($url)
     {
-        $this->_updateAction('delete', $url);
+        $response_data = $this->_updateAction('delete', $url);
+        return ['data' => $response_data,'code' => $this->_last_status_code];
     }
 
     /**
