@@ -21,7 +21,7 @@ class ConfigLoader
 
     public function loadFromENV($path = null, $name = null)
     {
-        $this->parser = new Dotenv(($path) ? $path : $this->path, ($name) ? $name : ".env");
+        $this->parser = new Dotenv(($path) ? $path : $this->path, ($name) ? $name : ".env.akamai");
         $this->parser->overload();
         $this->addRules();
         $this->flag = true;
