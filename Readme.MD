@@ -2,6 +2,12 @@
 
 #### NOTE: This package is based on [Akamai plugin by Raben](https://github.com/raben/Akamai/). So credits goes to him. I have just packaged it so it will be easy for the developers to make API calls.
 
+### Sample `.env.akamai`
+
+    AKAMAI_HOST="Your Netstorage Host"
+    AKAMAI_KEY="Your Netstorage Key"
+    AKAMAI_KEYNAME="Your Netstorage Key Name"
+
 ### Explanation:
 This package has two facade classes
 
