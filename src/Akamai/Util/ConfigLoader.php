@@ -16,7 +16,7 @@ class ConfigLoader
 
     public function __construct()
     {
-        $this->path = __DIR__."/../";
+        $this->path = "./";
     }
 
     public function loadFromENV($path = null, $name = null)
