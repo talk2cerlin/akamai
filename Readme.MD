@@ -29,9 +29,14 @@ This package has two facade classes
         /**
             Used to override the settings with different env file. Shoule be called before calling any methods from Akamai facade
             $path - path where the .env file is located. Defaults to package root directory
-            $name - can be used if the file name is different than .env [like .akamai]. Defaults to ".env" name
+            $name - can be used if the file name is different than .env [like .akamai]. Defaults to ".env.akamai"
         **/
         Config::loadFromENV($path, $name);
+
+        /**
+            To get akamai configuration
+        **/
+        Config::getAkamaiConfig()
         
 ### Usage sample
 
