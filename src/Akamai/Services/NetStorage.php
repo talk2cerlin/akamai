@@ -34,10 +34,6 @@ class NetStorage
         return $this->_last_status_code;
     }
 
-    /*
-        Implemented Method from Interface
-    */
-
     protected function upload($url, $body)
     {
         $response_data = $this->_updateAction('upload', $url, array('body' => $body));
