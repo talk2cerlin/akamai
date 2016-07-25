@@ -22,9 +22,9 @@ class NetStorage
     protected function __construct()
     {
         $this->config = Config::getAkamaiConfig();
-        $this->key = $this->config['AKA_FTP_KEY'];
-        $this->key_name = $this->config['AKA_FTP_KEYNAME'];
-        $this->host = $this->config['AKA_FTP_HOST'];
+        $this->key = $this->config['AKAMAI_KEY'];
+        $this->key_name = $this->config['AKAMAI_KEYNAME'];
+        $this->host = $this->config['AKAMAI_HOST'];
         $this->auth = new AkamaiAuth($this->key, $this->key_name);
         // $this->version = $this->config->version;
     }

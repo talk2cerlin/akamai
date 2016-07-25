@@ -30,9 +30,9 @@ class ConfigLoader
 
     private function addRules()
     {
-        $this->parser->required('AKA_FTP_HOST')->notEmpty();
-        $this->parser->required('AKA_FTP_KEY')->notEmpty();
-        $this->parser->required('AKA_FTP_KEYNAME')->notEmpty();
+        $this->parser->required('AKAMAI_HOST')->notEmpty();
+        $this->parser->required('AKAMAI_KEY')->notEmpty();
+        $this->parser->required('AKAMAI_KEYNAME')->notEmpty();
     }
 
     private function get($key)
@@ -48,9 +48,9 @@ class ConfigLoader
             $this->loadFromENV();
         }
         return [
-            "AKA_FTP_HOST" => $this->get("AKA_FTP_HOST"),
-            "AKA_FTP_KEY" => $this->get("AKA_FTP_KEY"),
-            "AKA_FTP_KEYNAME" => $this->get("AKA_FTP_KEYNAME")
+            "AKAMAI_HOST" => $this->get("AKAMAI_HOST"),
+            "AKAMAI_KEY" => $this->get("AKAMAI_KEY"),
+            "AKAMAI_KEYNAME" => $this->get("AKAMAI_KEYNAME")
         ];
     }
 }
