@@ -5,6 +5,7 @@ namespace Akamai;
 use Akamai\Interfaces\AkamaiInterface;
 use Akamai\Exceptions\FileNotFoundException;
 use Akamai\Services\NetStorage;
+use Akamai\Services\TokenGenerator;
 use Akamai\Facades\Config;
 
 class Akamai extends NetStorage implements AkamaiInterface
@@ -14,6 +15,12 @@ class Akamai extends NetStorage implements AkamaiInterface
     public function __construct()
     {
         $this->client = new NetStorage();
+    }
+
+    public function generateToken($duration, $type = "hdnea")
+    {
+        $this->tokenGenerator = new TokenGenerator($duration);
+        return strtolower($type) . "=" . $this->tokenGenerator->getToken();
     }
 
     public function dir($url)
