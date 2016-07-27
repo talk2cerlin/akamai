@@ -50,7 +50,8 @@ class ConfigLoader
         return [
             "AKAMAI_HOST" => $this->get("AKAMAI_HOST"),
             "AKAMAI_KEY" => $this->get("AKAMAI_KEY"),
-            "AKAMAI_KEYNAME" => $this->get("AKAMAI_KEYNAME")
+            "AKAMAI_KEYNAME" => $this->get("AKAMAI_KEYNAME"),
+            "AKAMAI_VIDEO_TOKEN" => $this->get("AKAMAI_VIDEO_TOKEN")
         ];
     }
 }
