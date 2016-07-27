@@ -1,7 +1,8 @@
 <?php
 namespace Akamai\Services;
 
-use Config;
+use Akamai\Facades\Config;
+use Akamai\Exceptions\AuthTokenNotFound;
 
 /**
     * class to generate the Token for Akamai Video Streaming
@@ -33,20 +34,29 @@ class TokenGenerator
     protected $field_delimiter = '~';
     protected $early_url_encoding = false;
     protected $opts; // array;
+    protected $config; // array;
 
     
-    public function __CONSTRUCT($duration, $key)
+    public function __CONSTRUCT($duration)
     {
+        $this->config = Config::getAkamaiConfig();
+        $this->setOptions($duration);
+    }
+
+    private function setOptions($duration)
+    {
+        if (!$this->config['AKAMAI_VIDEO_TOKEN']) {
+            throw new AuthTokenNotFound("Akamai authentication token (AKAMAI_VIDEO_TOKEN) is not found in the loaded config", 2001);
+        }
+
         $this->opts =  [
             'start-time=' => "now",
             'algo=' => 'sha256',
             'window=' => $duration,
-            'key' => $key,
+            'key' => $this->config['AKAMAI_VIDEO_TOKEN'],
             'acl=' => '*',
         ];
-
     }
-
 
     protected function encode($val)
     {
@@ -176,7 +186,7 @@ class TokenGenerator
         if ($this->acl) {
             return 'acl='.$this->encode($this->acl).$this->field_delimiter;
         } elseif (! $this->url) {
-            //return a default open acl     $token = $g->generate_token($this);
+            //return a default open acl     $token = $g->generateToken($this);
             return 'acl='.$this->encode('*').$this->field_delimiter;
             //return 'acl='.$this->encode('/*').$this->field_delimiter;
         }
@@ -322,15 +332,15 @@ class TokenGenerator
             
             /*
             $m_token .= $this->getSessionIDField();
-            $m_token .= $this->get_data_field();
+            $m_token .= $this->getDataField();
             */
 
             $m_token_digest = (string)$m_token;
             $m_token_digest .= $this->getURLField();
-            $m_token_digest .= $this->get_salt_field();
+            $m_token_digest .= $this->getSaltField();
             
             // produce the signature and append to the tokenized string
-            $signature = hash_hmac($this->getAlgorithm(), rtrim($m_token_digest, $this->get_field_delimiter()), $this->h2b($this->get_key()));
+            $signature = hash_hmac($this->getAlgorithm(), rtrim($m_token_digest, $this->getFieldDelimiter()), $this->h2b($this->getKey()));
             return $m_token.'hmac='.$signature;
         
         } catch (Exception $e) {
@@ -359,17 +369,17 @@ class TokenGenerator
                 } elseif (($o == 'url=') || ($o == 'u')) {
                     $this->setURL($v);
                 } elseif (($o == 'salt=') || ($o == 'S')) {
-                    $this->set_salt($v);
+                    $this->setSalt($v);
                 } elseif (($o == 'field-delimiter=') || ($o == 'd')) {
-                    $this->set_field_delimiter($v);
+                    $this->setFieldDelimiter($v);
                 } elseif (($o == 'algo=') || ($o == 'A')) {
                     $this->setAlgorithm($v);
                 } elseif (($o == 'key') || ($o == 'k')) {
-                    $this->set_key($v);
+                    $this->setKey($v);
                 }
             }
         
-            return  $this->generate_token();
+            return  $this->generateToken();
             
         }
     }
