@@ -7,6 +7,7 @@
     AKAMAI_HOST="Your Netstorage Host"
     AKAMAI_KEY="Your Netstorage Key"
     AKAMAI_KEYNAME="Your Netstorage Key Name"
+    AKAMAI_VIDEO_TOKEN="Your Video Token"
 
 ### Explanation:
 This package has two facade classes
@@ -19,6 +20,7 @@ This package has two facade classes
             3. Akamai::download($ftp_url); // To download the file contents from a given ftp path
             4. Akamai::delete($ftp_url); // To delete a file from a given ftp path
             5. Akamai::rmdir($ftp_url); // To remove directory from a given ftp path. [CAUTION: Directory must be empty else the call will fail]
+            6. Akamai::generateToken($duration, $type); // Method to generate dynamic token. $duration has to be in seconds and $type can be `hdnts` or `hdnea`
         
 ##### 2) Akamai\Facades\Config
        
@@ -87,3 +89,27 @@ This package has two facade classes
     } catch (Exception $e) {
         echo $e->getMessage();
     }
+
+
+
+
+###Change Log:
+
+####v1.1.1
+1. Issue fix
+2. Document update
+
+####v1.1.0
+1. Added video token api for generating tokens for video based on duration.
+
+####v1.0.3
+1. Code optimization
+
+####v1.0.2
+1. Issue fixes
+
+####v1.0.1
+1. Issue fixes
+
+####v1.0.0
+1. Initial version with support for upload, list directory, download, remove directory and delete
