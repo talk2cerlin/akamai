@@ -4,7 +4,7 @@ namespace Akamai\Exceptions;
 
 use Akamai\Exceptions\BaseException;
 
-class AuthTokenNotFound extends BaseException
+class AuthTokenNotFoundException extends BaseException
 {
 
     public function __construct($message, $code)
