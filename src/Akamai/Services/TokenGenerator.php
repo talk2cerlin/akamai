@@ -46,7 +46,7 @@ class TokenGenerator
     private function setOptions($duration)
     {
         if (!$this->config['AKAMAI_VIDEO_TOKEN']) {
-            throw new AuthTokenNotFoundException("Akamai authentication token (AKAMAI_VIDEO_TOKEN) is not found in the loaded config", 2001);
+            throw new AuthTokenNotFoundException("Akamai authentication token (AKAMAI_VIDEO_TOKEN) is not found in the loaded config", 1003);
         }
 
         $this->opts =  [
