@@ -6,7 +6,6 @@ use Akamai\Interfaces\AkamaiInterface;
 use Akamai\Exceptions\FileNotFoundException;
 use Akamai\Services\NetStorage;
 use Akamai\Services\TokenGenerator;
-use Akamai\Facades\Config;
 
 class Akamai extends NetStorage implements AkamaiInterface
 {
