@@ -3,7 +3,9 @@
 namespace Akamai\Util;
 
 use Dotenv\Dotenv;
-use Akamai\Model\AkamaiConfiguration;
+use Akamai\Exceptions\InvalidDataTypeFoundException;
+use Akamai\Exceptions\InvalidKeyFoundException;
+use Akamai\Exceptions\DotEnvException;
 
 class ConfigLoader
 {
@@ -21,11 +23,66 @@ class ConfigLoader
 
     public function loadFromENV($path = null, $name = null)
     {
-        $this->parser = new Dotenv(($path) ? $path : $this->path, ($name) ? $name : ".env.akamai");
-        $this->parser->overload();
-        $this->addRules();
+        try {
+            $this->parser = new Dotenv(($path) ? $path : $this->path, ($name) ? $name : ".env.akamai");
+            $this->parser->overload();
+            $this->addRules();
+        } catch (\Exception $e) {
+            throw new DotEnvException($e->getMessage(), 1006);
+        }
         $this->flag = true;
         return $this->getAkamaiConfig();
+    }
+
+    public function get($key)
+    {
+        return getenv($key);
+    }
+
+    public function set($key, $value)
+    {
+        putenv($key . "=" . $value);
+    }
+
+    public function setAkamaiConfig($config)
+    {
+        if (is_array($config)) {
+            foreach ($config as $key => $value) {
+                if (in_array($key, $this->getKeys())) {
+                    $this->set($key, $value);
+                } else {
+                    throw new InvalidKeyFoundException("Invalid key found (" . $key . ")", 1005);
+                }
+            }
+        } else {
+            throw new InvalidDataTypeFoundException("Expected array but found ". gettype($config) . " instead", 1004);
+        }
+
+        $this->flag = true;
+    }
+
+    public function getAkamaiConfig()
+    {
+        if (!$this->flag) {
+            $this->loadFromENV();
+        }
+        $result = [];
+
+        foreach ($this->getKeys() as $value) {
+            $result[$value] = $this->get($value);
+        }
+
+        return $result;
+    }
+
+    private function getKeys()
+    {
+        return [
+            "AKAMAI_HOST",
+            "AKAMAI_KEY",
+            "AKAMAI_KEYNAME",
+            "AKAMAI_VIDEO_TOKEN"
+        ];
     }
 
     private function addRules()
@@ -33,25 +90,5 @@ class ConfigLoader
         $this->parser->required('AKAMAI_HOST')->notEmpty();
         $this->parser->required('AKAMAI_KEY')->notEmpty();
         $this->parser->required('AKAMAI_KEYNAME')->notEmpty();
-    }
-
-    private function get($key)
-    {
-        return getenv($key);
-    }
-
-    // public function setAkamaiC
-
-    public function getAkamaiConfig()
-    {
-        if (!$this->flag) {
-            $this->loadFromENV();
-        }
-        return [
-            "AKAMAI_HOST" => $this->get("AKAMAI_HOST"),
-            "AKAMAI_KEY" => $this->get("AKAMAI_KEY"),
-            "AKAMAI_KEYNAME" => $this->get("AKAMAI_KEYNAME"),
-            "AKAMAI_VIDEO_TOKEN" => $this->get("AKAMAI_VIDEO_TOKEN")
-        ];
     }
 }
