@@ -64,7 +64,7 @@ class ConfigLoader
         $result = [];
 
         foreach ($this->getKeys() as $value) {
-            $result[$value] = $this->get($value);
+            $result[$value] = ($this->get($value)) ? $this->get($value) : "";
         }
 
         return $result;
