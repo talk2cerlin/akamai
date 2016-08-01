@@ -4,6 +4,10 @@ namespace Akamai\Services;
 
 use Akamai\Services\AkamaiAuth;
 use Akamai\Facades\Config;
+use Akamai\Facades\ArrayHelper;
+use Akamai\Exceptions\ValidationException;
+use Akamai\Exceptions\InvalidDataTypeFoundException;
+use Valitron\Validator as Valitron;
 
 /*
     Original Source of this class can be found in https://github.com/raben/Akamai
@@ -21,12 +25,34 @@ class NetStorage
 
     protected function __construct()
     {
-        $this->config = Config::getAkamaiConfig();
+        $this->config = $this->validateConfig(Config::getAkamaiConfig());
         $this->key = $this->config['AKAMAI_KEY'];
         $this->key_name = $this->config['AKAMAI_KEYNAME'];
         $this->host = $this->config['AKAMAI_HOST'];
         $this->auth = new AkamaiAuth($this->key, $this->key_name);
         // $this->version = $this->config->version;
+    }
+
+    private function validateConfig($config)
+    {
+        if (!is_array($config)) {
+            // Throw exception
+            throw new InvalidDataTypeFoundException("Expected array but found ". gettype($config) . " instead", 1004);
+        }
+        $validator = new Valitron($config);
+        $validator->rule('required', ['AKAMAI_KEY', 'AKAMAI_KEYNAME', 'AKAMAI_HOST']);
+        $validator->rule('lengthMin', ['AKAMAI_KEYNAME', 'AKAMAI_HOST'], 1);
+        $validator->rule('required', 'AKAMAI_KEY', 50);
+
+        if (!$validator->validate()) {
+            // Concatinate all message and Throw exception
+
+            $message = implode(',', ArrayHelper::flatten($validator->errors()));
+
+            throw new ValidationException($message, 1006);
+        }
+
+        return $config;
     }
 
     protected function getLastStatusCode()
