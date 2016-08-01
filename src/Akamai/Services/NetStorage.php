@@ -49,7 +49,7 @@ class NetStorage
 
             $message = implode(',', ArrayHelper::flatten($validator->errors()));
 
-            throw new ValidationException($message, 1006);
+            throw new ValidationException($message, 1007);
         }
 
         return $config;
