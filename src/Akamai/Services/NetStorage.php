@@ -41,7 +41,6 @@ class NetStorage
         }
         $validator = new Valitron($config);
         $validator->rule('required', ['AKAMAI_KEY', 'AKAMAI_KEYNAME', 'AKAMAI_HOST']);
-        $validator->rule('lengthMin', ['AKAMAI_KEYNAME', 'AKAMAI_HOST'], 1);
         $validator->rule('required', 'AKAMAI_KEY', 50);
 
         if (!$validator->validate()) {
