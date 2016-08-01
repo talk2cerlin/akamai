@@ -26,7 +26,6 @@ class ConfigLoader
         try {
             $this->parser = new Dotenv(($path) ? $path : $this->path, ($name) ? $name : ".env.akamai");
             $this->parser->overload();
-            $this->addRules();
         } catch (\Exception $e) {
             throw new DotEnvException($e->getMessage(), 1006);
         }
@@ -48,11 +47,7 @@ class ConfigLoader
     {
         if (is_array($config)) {
             foreach ($config as $key => $value) {
-                if (in_array($key, $this->getKeys())) {
-                    $this->set($key, $value);
-                } else {
-                    throw new InvalidKeyFoundException("Invalid key found (" . $key . ")", 1005);
-                }
+                $this->set($key, $value);
             }
         } else {
             throw new InvalidDataTypeFoundException("Expected array but found ". gettype($config) . " instead", 1004);
@@ -83,12 +78,5 @@ class ConfigLoader
             "AKAMAI_KEYNAME",
             "AKAMAI_VIDEO_TOKEN"
         ];
-    }
-
-    private function addRules()
-    {
-        $this->parser->required('AKAMAI_HOST')->notEmpty();
-        $this->parser->required('AKAMAI_KEY')->notEmpty();
-        $this->parser->required('AKAMAI_KEYNAME')->notEmpty();
     }
 }
