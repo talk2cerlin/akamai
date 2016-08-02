@@ -2,7 +2,7 @@
 namespace Akamai\Services;
 
 use Akamai\Facades\Config;
-use Akamai\Exceptions\AuthTokenNotFound;
+use Akamai\Exceptions\AuthTokenNotFoundException;
 
 /**
     * class to generate the Token for Akamai Video Streaming
