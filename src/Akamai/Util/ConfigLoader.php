@@ -54,6 +54,8 @@ class ConfigLoader
         }
 
         $this->flag = true;
+
+        return $this->getAkamaiConfig();
     }
 
     public function getAkamaiConfig()
