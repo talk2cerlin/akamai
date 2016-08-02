@@ -2,7 +2,7 @@
 namespace Akamai\Services;
 
 use Akamai\Facades\Config;
-use Akamai\Exceptions\AuthTokenNotFound;
+use Akamai\Exceptions\AuthTokenNotFoundException;
 
 /**
     * class to generate the Token for Akamai Video Streaming
@@ -45,8 +45,8 @@ class TokenGenerator
 
     private function setOptions($duration)
     {
-        if (!$this->config['AKAMAI_VIDEO_TOKEN']) {
-            throw new AuthTokenNotFound("Akamai authentication token (AKAMAI_VIDEO_TOKEN) is not found in the loaded config", 2001);
+        if (!isset($this->config['AKAMAI_VIDEO_TOKEN']) || !trim($this->config['AKAMAI_VIDEO_TOKEN'])) {
+            throw new AuthTokenNotFoundException("Akamai authentication token (AKAMAI_VIDEO_TOKEN) is not found in the loaded config", 1003);
         }
 
         $this->opts =  [

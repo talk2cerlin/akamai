@@ -1,6 +1,15 @@
 ## Netstorage API library package for Akamai
 
-#### NOTE: This package is based on [Akamai plugin by Raben](https://github.com/raben/Akamai/). So credits goes to him. I have just packaged it so it will be easy for the developers to make API calls.
+This package follows [facade design pattern](https://en.wikipedia.org/wiki/Facade_pattern) (Click on the link to read more on this). 
+
+### Features:
+
+1. Upload a file to Akamai Netstorage
+2. List the files and directories of a given directory
+3. Download a file
+4. Delete a file
+5. Remove a directory (Directory must be empty to remove)
+6. Generate Video Auth token for playback
 
 ### Sample `.env.akamai`
 
@@ -10,35 +19,120 @@
     AKAMAI_VIDEO_TOKEN="Your Video Token"
 
 ### Explanation:
-This package has two facade classes
+This package has three facade classes
 
-##### 1) Akamai\Facades\Akamai
+#### 1) Akamai\Facades\Config
+##### Introduction:
+`Config` facade is used to load/set the credentials which are used for API requests
 
-        Methods:
-            1. Akamai::upload($ftp_url, $body); // To upload the data to server
-            2. Akamai::dir($ftp_url); // To list the directories and files in a given ftp path
-            3. Akamai::download($ftp_url); // To download the file contents from a given ftp path
-            4. Akamai::delete($ftp_url); // To delete a file from a given ftp path
-            5. Akamai::rmdir($ftp_url); // To remove directory from a given ftp path. [CAUTION: Directory must be empty else the call will fail]
-            6. Akamai::generateToken($duration, $type); // Method to generate dynamic token. $duration has to be in seconds and $type can be `hdnts` or `hdnea`
-        
-##### 2) Akamai\Facades\Config
-       
-        Configuration loader internally uses a dov env parser to parse the credentials.
-        By default this package searches for .env.akamai file in root directory of your project.
-        This config class has two public methods
+##### Methods:
+###### 1) Config::loadFromENV($path, $name);
 
-        /**
-            Used to override the settings with different env file. Shoule be called before calling any methods from Akamai facade
-            $path - path where the .env file is located. Defaults to package root directory
-            $name - can be used if the file name is different than .env [like .akamai]. Defaults to ".env.akamai"
-        **/
-        Config::loadFromENV($path, $name);
+This method is used to load the credentials from an `env` file. This method will try to load all four env variables which are mentioned in the sample `.env.akamai` file.
 
-        /**
-            To get akamai configuration
-        **/
-        Config::getAkamaiConfig()
+    /*
+        @param: $path - Path of the env file. Default is current working directory.
+        @param: $name - Name of the env file to load. Default is `.env.akamai`.
+        @return: Array - Loaded configuration.
+        @throws: Akamai\Exceptions\DotEnvException.
+    */
+
+###### 2) Config::setAkamaiConfig($config)
+
+This method is to set the credentials in runtime. Will be usefull when the credentials are stored in database or any other mode of storage.
+ 
+    /*
+        @param: $config - Configuration to be updated.
+        @return: Array - Loaded configuration.
+        @throws: Akamai\Exceptions\InvalidDataTypeFoundException;
+    */
+
+###### 3) Config::getAkamaiConfig()
+This method is to get the credentials in runtime.
+
+    /*
+        @return: Array - Loaded configuration.
+    */
+
+#### 2) Akamai\Facades\Akamai
+##### Introduction:
+`Akamai` facade is used to do the basic operations like upload, download etc.
+
+##### Methods:
+###### 1) Akamai::upload($directory_path, $body);
+
+This method is used to upload a file to Akamai.
+
+    /*
+        @param: $directory_path - The path in which the file has to be updated. ex: /cpcode/folder/path
+        @param: $body - Content of the file which has to be written.
+        @return: Array - Array has data and code variables.
+    */
+
+###### 2) Akamai::dir($directory_path);
+
+This method is used to list the files in a particular directory.
+
+    /*
+        @param: $directory_path - Directory path which has to be listed. ex: /cpcode/folder/path
+        @return: Array - Array has data and code variables.
+    */
+
+###### 3) Akamai::download($file_path);
+
+This method is to download a file
+
+    /*
+        @param: $file_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @return: String - Content of the file.
+    */
+
+###### 4) Akamai::delete($file_path);
+
+This method is to delete a file
+
+    /*
+        @param: $file_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @return: Array - Array has data and code variables.
+    */
+
+###### 5) Akamai::rmdir($directory_path);
+
+This method is to delete a directory. [CAUTION: Directory has to be empty. (ie, list and delete all files individually before performing this API call)].
+
+    /*
+        @param: $directory_path - Directory path which has to be deleted. ex: /cpcode/folder/path
+        @return: Array - Array has data and code variables.
+    */
+
+###### 6) Akamai::generateToken($duration, $type);
+[DEPRECATED] Please use Token facade to generate video tokens
+
+This method is to generate video authentication token.
+
+    /*
+        @param: $duration - Time to live (ttl) of that token. (In seconds)
+        @param: $type - It should be `hdnts` or `hdnea`.
+        @return: String - Final token which has to be appended with the m3u8 request.
+    */
+
+#### 3) Akamai\Facades\Token
+##### Introduction:
+`Token` facade is used to generate video auth tokens.
+
+##### Methods:
+###### 1) Token::generateVideoToken($duration, $type);
+
+This method is to generate video authentication token.
+
+    /*
+        @param: $duration - Time to live (ttl) of that token. (In seconds)
+        @param: $type - It should be `hdnts` or `hdnea`.
+        @return: String - Final token which has to be appended with the m3u8 request.
+    */
+
+<hr />
+
         
 ### Usage sample
 
@@ -48,6 +142,7 @@ This package has two facade classes
 
     use Akamai\Facades\Config;
     use Akamai\Facades\Akamai;
+    use Akamai\Facades\Token;
 
     // For loading config info from different env file. Can be used to change credentials on run time. This method overwrites the existing config with latest one.
     Config::loadFromENV('./', '.akamai');
@@ -86,14 +181,23 @@ This package has two facade classes
             ['data' => "could be string or xml",'code' => 200];
         **/
 
+        $token = Token::generateVideoToken(100, "hdnts");
+        var_dump($token);
+        /**
+            hdnts=st=1470130755~exp=1470130855~acl=*~hmac=99665898830y435t37487889hl672055956t9p7455e14g765c056i413u433125;
+        **/
+
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 
 
-
-
 ###Change Log:
+####v2.0.0
+1. New `Token` facade
+2. Code refactor
+3. Bug fixes
+4. Deprecated `Akamai::generateToken($duration, $type)`
 
 ####v1.1.1
 1. Issue fix
@@ -113,3 +217,5 @@ This package has two facade classes
 
 ####v1.0.0
 1. Initial version with support for upload, list directory, download, remove directory and delete
+
+#### NOTE: This package is based on [Akamai plugin by Raben](https://github.com/raben/Akamai/). So credits goes to him. I have added Video auth token with this and packaged it.

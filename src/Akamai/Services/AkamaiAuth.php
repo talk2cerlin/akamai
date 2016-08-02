@@ -57,7 +57,7 @@ class AkamaiAuth
                   ($this->version == 5) ? "sha256" :
                   null;
         if ($algorithm === null) {
-            throw new VersionNotSupportedException('it is not supported version ['.$this->version.']', 2001);
+            throw new VersionNotSupportedException('it is not supported version ['.$this->version.']', 1002);
         }
         return base64_encode(hash_hmac($algorithm, $sign_string, $this->key, true));
     }
