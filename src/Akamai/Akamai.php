@@ -32,7 +32,7 @@ class Akamai extends NetStorage implements AkamaiInterface
 
     public function delete($url)
     {
-        $this->client->delete($url);
+        return $this->client->delete($url);
     }
 
     public function download($url)
