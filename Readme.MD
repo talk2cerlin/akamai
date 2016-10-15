@@ -64,9 +64,9 @@ This method is to get the credentials in runtime.
 This method is used to upload a file to Akamai.
 
     /*
-        @param: $directory_path - The path in which the file has to be updated. ex: /cpcode/folder/path
-        @param: $body - Content of the file which has to be written.
-        @return: Array - Array has data and code variables.
+        @param: $akamai_path - File location with file name and extension to which the file should be uploaded. ex: /cpcode/folder/path/file.mp4
+        @param: $file_path - Path to the file to be written.
+        @return: Array - ["data" => API response, "code" => API response status code]
     */
 
 ###### 2) Akamai::dir($directory_path);
@@ -74,8 +74,8 @@ This method is used to upload a file to Akamai.
 This method is used to list the files in a particular directory.
 
     /*
-        @param: $directory_path - Directory path which has to be listed. ex: /cpcode/folder/path
-        @return: Array - Array has data and code variables.
+        @param: $akamai_path - Directory path to be listed. ex: /cpcode/folder/path
+        @return: Array - ["data" => API response, "code" => API response status code]
     */
 
 ###### 3) Akamai::download($file_path);
@@ -83,8 +83,8 @@ This method is used to list the files in a particular directory.
 This method is to download a file
 
     /*
-        @param: $file_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
-        @return: String - Content of the file.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @return: Array - ["data" => API response (contents of file on success), "code" => API response status code]
     */
 
 ###### 4) Akamai::delete($file_path);
@@ -92,8 +92,8 @@ This method is to download a file
 This method is to delete a file
 
     /*
-        @param: $file_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
-        @return: Array - Array has data and code variables.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @return: Array - ["data" => API response, "code" => API response status code]
     */
 
 ###### 5) Akamai::rmdir($directory_path);
@@ -101,8 +101,8 @@ This method is to delete a file
 This method is to delete a directory. [CAUTION: Directory has to be empty. (ie, list and delete all files individually before performing this API call)].
 
     /*
-        @param: $directory_path - Directory path which has to be deleted. ex: /cpcode/folder/path
-        @return: Array - Array has data and code variables.
+        @param: $akamai_path - Directory path to be deleted. ex: /cpcode/folder/path
+        @return: Array - ["data" => API response, "code" => API response status code]
     */
 
 ###### 6) Akamai::generateToken($duration, $type);
