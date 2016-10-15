@@ -47,8 +47,7 @@ class Akamai extends NetStorage implements AkamaiInterface
 
     public function upload($filename, $raw_file_loc)
     {
-        $response = $this->client->upload($filename, $this->readFileData($raw_file_loc));
-        return $response;
+        return $this->client->upload($filename, $this->readFileData($raw_file_loc));
     }
 
     private function readFileData($filename)
