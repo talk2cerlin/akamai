@@ -57,6 +57,16 @@ This method is to get the credentials in runtime.
 #### 2) Akamai\Facades\Akamai
 ##### Introduction:
 `Akamai` facade is used to do the basic operations like upload, download etc.
+All API operations return responses as an array with fields for "data" and "code".
+
+    /*
+        [
+            "data" => API response (simple string or xml string),
+            "code" => API response status code
+        ]
+    */
+
+For a list of all possible status codes, see https://control.akamai.com/dl/customers/NS/NS_http_api_FS.pdf
 
 ##### Methods:
 ###### 1) Akamai::upload($directory_path, $body);
@@ -135,62 +145,69 @@ This method is to generate video authentication token.
 
         
 ### Usage sample
+```php
+<?php
 
-    <?php
+require_once __DIR__ . "/vendor/autoload.php";
 
-    require_once __DIR__ . "/vendor/autoload.php";
+use Akamai\Facades\Config;
+use Akamai\Facades\Akamai;
+use Akamai\Facades\Token;
 
-    use Akamai\Facades\Config;
-    use Akamai\Facades\Akamai;
-    use Akamai\Facades\Token;
+// For loading config info from different env file. Can be used to change credentials on run time. This method overwrites the existing config with latest one.
+Config::loadFromENV('./', '.akamai');
 
-    // For loading config info from different env file. Can be used to change credentials on run time. This method overwrites the existing config with latest one.
-    Config::loadFromENV('./', '.akamai');
+// Getting the akamai config in runtime
+$config = Config::getAkamaiConfig();
 
-    // Getting the akamai config in runtime
-    $config = Config::getAkamaiConfig();
+try {
+    /**
+     * @var array
+     * Example: [
+     *              "data" =>
+     *                  "<?xml version="1.0" encoding="ISO-8859-1"?>
+     *                      <stat directory="/cpcode/directory/path">
+     *                          <file type="file" name="filename.mp4" mtime="1234567890" size="1024" md5="f0qcf8xkl6y7p9mo5zror7bpmtiq392d"/>
+     *                      </stat>"
+     *               "code" => 200
+     *           ]
+     */
+    $dirResponse = Akamai::dir('/cpcode/directory/to/list');
 
-    try {
-        $xml = Akamai::dir('/cpcode/directory/to/list');
-        var_dump($xml);
-        /**
-            <?xml version="1.0" encoding="ISO-8859-1"?>
-                <stat directory="/cpcode/directory/path">
-                    <file type="file" name="filename.mp4" mtime="1234567890" size="1024" md5="f0qcf8xkl6y7p9mo5zror7bpmtiq392d"/>
-                </stat>
-        **/
+    /** @var array */
+    $uploadResponse = Akamai::upload('/cpcode/path/to/file/testing.mp4', './testing.mp4');
+    /** @var string */
+    $uploadResponeData = $uploadRespone["data"];
+    /** @var int */
+    $uploadResponseCode = $uploadResponse["code"];
 
-        $uploadResponse = Akamai::upload('/cpcode/path/to/file/testing.mp4', file_get_contents('./testing.mp4'));
-        var_dump($uploadResponse);
-        /**
-            ['data' => "could be string or xml",'code' => 200];
-        **/
-        
-        $filedata = Akamai::download('/cpcode/path/to/file/testing.mp4');
-        file_put_contents('./testing.mp4', $filedata);
-
-        $deleteResponse = Akamai::delete('/cpcode/path/to/file/testing.mp4');
-        var_dump($deleteResponse);
-        /**
-            ['data' => "could be string or xml",'code' => 200];
-        **/
-
-        $rmdirResponse = Akamai::rmdir('/cpcode/path/to/file/');
-        var_dump($rmdirResponse);
-        /**
-            ['data' => "could be string or xml",'code' => 200];
-        **/
-
-        $token = Token::generateVideoToken(100, "hdnts");
-        var_dump($token);
-        /**
-            hdnts=st=1470130755~exp=1470130855~acl=*~hmac=99665898830y435t37487889hl672055956t9p7455e14g765c056i413u433125;
-        **/
-
-    } catch (Exception $e) {
-        echo $e->getMessage();
+    /** @var array */
+    $downloadResponse = Akamai::download('/cpcode/path/to/file/testing.mp4');
+    if ($downloadReponse["code"] === 200) {
+        file_put_contents('./testing.mp4', $downloadResponse["data"]);
+    } else {
+        // perform some error handling based on status code
     }
 
+
+    /** @var array - ['data' => "could be simpel string or xml string",'code' => 200] */
+    $deleteResponse = Akamai::delete('/cpcode/path/to/file/testing.mp4');
+
+
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $rmdirResponse = Akamai::rmdir('/cpcode/path/to/file/');
+
+
+    $token = Token::generateVideoToken(100, "hdnts");
+    var_dump($token);
+    /**
+     * hdnts=st=1470130755~exp=1470130855~acl=*~hmac=99665898830y435t37487889hl672055956t9p7455e14g765c056i413u433125;
+     */
+
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+```
 
 ###Change Log:
 ####v2.0.0
