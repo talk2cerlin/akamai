@@ -77,19 +77,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Config::get("AKAMAI_VIDEO_TOKEN"), "kfTyWl8Ai9LjTMnYsoS1BoENsENXCWxR");
 
     }
-
-    public function testSetAkamaiConfigFailureOne()
-    {
-        $this->expectException('Akamai\Exceptions\InvalidKeyFoundException');
-
-        Config::setAkamaiConfig($config = [
-            "AKAMAI_HOST" => "testSettingDataInBulk",
-            "dummy" => "zq4tXojyAZ3lSJAkWo5968CmHkzehCLPXfzfHzhFFL082MTv3U",
-            "AKAMAI_KEYNAME" => "testSettingDataInBulk",
-            "AKAMAI_VIDEO_TOKEN" => "kfTyWl8Ai9LjTMnYsoS1BoENsENXCWxR"
-        ]);
-    }
-
+    
     public function testSetAkamaiConfigFailureTwo()
     {
 
