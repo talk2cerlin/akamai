@@ -210,6 +210,16 @@ try {
 ```
 
 ###Change Log:
+
+####v3.0.0 Thanks to [Julian Griggs](https://github.com/JulianGriggs)
+1. Standardization of API
+2. Refactor
+3. Document update
+4. Removed unwanted test
+
+####v2.0.1 Thanks to [Julian Griggs](https://github.com/JulianGriggs)
+1. Added missing return statement for `delete` method.
+
 ####v2.0.0
 1. New `Token` facade
 2. Code refactor
