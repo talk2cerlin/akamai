@@ -11,7 +11,6 @@ class AkamaiAuth
     public $key_name;
     public $client;
     public $server;
-    public $time;
     public $unique_id;
     public $version = 5;
 
