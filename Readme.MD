@@ -95,7 +95,7 @@ This method is used to list the files in a particular directory.
 This method is to download a file
 
     /*
-        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4
         @return: Array - ["data" => API response (contents of file on success), "code" => API response status code]
     */
 
@@ -104,7 +104,7 @@ This method is to download a file
 This method is to delete a file
 
     /*
-        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
@@ -113,8 +113,8 @@ This method is to delete a file
 This method is to rename a file
 
     /*
-        @param: $old_akamai_path - Existing file location with file name and extension. ex: /cpcode/folder/path/file.mp4.
-        @param: $new_akamai_path - Desired file location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @param: $old_akamai_path - Existing file location with file name and extension. ex: /cpcode/folder/path/file.mp4
+        @param: $new_akamai_path - Desired file location with file name and extension. ex: /cpcode/new_folder/new_path/new_file.mp4
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
@@ -198,7 +198,7 @@ try {
     /** @var array */
     $uploadResponse = Akamai::upload('/cpcode/path/to/file/testing.mp4', './testing.mp4');
     /** @var string */
-    $uploadResponeData = $uploadRespone["data"];
+    $uploadResponseData = $uploadRespone["data"];
     /** @var int */
     $uploadResponseCode = $uploadResponse["code"];
 
@@ -210,14 +210,17 @@ try {
         // perform some error handling based on status code
     }
 
-
-    /** @var array - ['data' => "could be simpel string or xml string",'code' => 200] */
-    $deleteResponse = Akamai::delete('/cpcode/path/to/file/testing.mp4');
-
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $renameResponse = Akamai::rename('/cpcode/path/to/file/testing.mp4', '/cpcode/new_path/to/file/new_testing.mp4');
 
     /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
-    $rmdirResponse = Akamai::rmdir('/cpcode/path/to/file/');
+    $deleteResponse = Akamai::delete('/cpcode/newpath/to/file/new_testing.mp4');
 
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $mkdirResponse = Akamai::mkdir('/cpcode/new_dir');
+
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $rmdirResponse = Akamai::rmdir('/cpcode/new_dir');
 
     $token = Token::generateVideoToken(100, "hdnts");
     var_dump($token);
