@@ -198,7 +198,7 @@ try {
     /** @var array */
     $uploadResponse = Akamai::upload('/cpcode/path/to/file/testing.mp4', './testing.mp4');
     /** @var string */
-    $uploadResponseData = $uploadRespone["data"];
+    $uploadResponseData = $uploadResponse["data"];
     /** @var int */
     $uploadResponseCode = $uploadResponse["code"];
 
@@ -234,6 +234,9 @@ try {
 ```
 
 ###Change Log:
+
+####v3.1.0 Thanks to [Julian Griggs](https://github.com/JulianGriggs)
+1. New mkdir and rename functions
 
 ####v3.0.0 Thanks to [Julian Griggs](https://github.com/JulianGriggs)
 1. Standardization of API
