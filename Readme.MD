@@ -8,8 +8,10 @@ This package follows [facade design pattern](https://en.wikipedia.org/wiki/Facad
 2. List the files and directories of a given directory
 3. Download a file
 4. Delete a file
-5. Remove a directory (Directory must be empty to remove)
-6. Generate Video Auth token for playback
+5. Rename a file
+6. Remove a directory (Directory must be empty to remove)
+7. Create a new directory
+8. Generate Video Auth token for playback
 
 ### Sample `.env.akamai`
 
@@ -69,7 +71,7 @@ All API operations return responses as an array with fields for "data" and "code
 For a list of all possible status codes, see https://control.akamai.com/dl/customers/NS/NS_http_api_FS.pdf
 
 ##### Methods:
-###### 1) Akamai::upload($directory_path, $body);
+###### 1) Akamai::upload($akamai_path, $file_path);
 
 This method is used to upload a file to Akamai.
 
@@ -79,7 +81,7 @@ This method is used to upload a file to Akamai.
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
-###### 2) Akamai::dir($directory_path);
+###### 2) Akamai::dir($akamai_path);
 
 This method is used to list the files in a particular directory.
 
@@ -88,25 +90,35 @@ This method is used to list the files in a particular directory.
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
-###### 3) Akamai::download($file_path);
+###### 3) Akamai::download($akamai_path);
 
 This method is to download a file
 
     /*
-        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4
         @return: Array - ["data" => API response (contents of file on success), "code" => API response status code]
     */
 
-###### 4) Akamai::delete($file_path);
+###### 4) Akamai::delete($akamai_path);
 
 This method is to delete a file
 
     /*
-        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4.
+        @param: $akamai_path - File location with file name and extension. ex: /cpcode/folder/path/file.mp4
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
-###### 5) Akamai::rmdir($directory_path);
+###### 5) Akamai::rename($old_akamai_path, $new_akamai_path);
+
+This method is to rename a file
+
+    /*
+        @param: $old_akamai_path - Existing file location with file name and extension. ex: /cpcode/folder/path/file.mp4
+        @param: $new_akamai_path - Desired file location with file name and extension. ex: /cpcode/new_folder/new_path/new_file.mp4
+        @return: Array - ["data" => API response, "code" => API response status code]
+    */
+
+###### 6) Akamai::rmdir($akamai_path);
 
 This method is to delete a directory. [CAUTION: Directory has to be empty. (ie, list and delete all files individually before performing this API call)].
 
@@ -115,7 +127,16 @@ This method is to delete a directory. [CAUTION: Directory has to be empty. (ie, 
         @return: Array - ["data" => API response, "code" => API response status code]
     */
 
-###### 6) Akamai::generateToken($duration, $type);
+###### 7) Akamai::mkdir($akamai_path);
+
+This method is to create a directory.
+
+    /*
+        @param: $akamai_path - Directory path to be added. ex: /cpcode/folder/path
+        @return: Array - ["data" => API response, "code" => API response status code]
+    */
+
+###### 8) Akamai::generateToken($duration, $type);
 [DEPRECATED] Please use Token facade to generate video tokens
 
 This method is to generate video authentication token.
@@ -177,7 +198,7 @@ try {
     /** @var array */
     $uploadResponse = Akamai::upload('/cpcode/path/to/file/testing.mp4', './testing.mp4');
     /** @var string */
-    $uploadResponeData = $uploadRespone["data"];
+    $uploadResponseData = $uploadRespone["data"];
     /** @var int */
     $uploadResponseCode = $uploadResponse["code"];
 
@@ -189,14 +210,17 @@ try {
         // perform some error handling based on status code
     }
 
-
-    /** @var array - ['data' => "could be simpel string or xml string",'code' => 200] */
-    $deleteResponse = Akamai::delete('/cpcode/path/to/file/testing.mp4');
-
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $renameResponse = Akamai::rename('/cpcode/path/to/file/testing.mp4', '/cpcode/new_path/to/file/new_testing.mp4');
 
     /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
-    $rmdirResponse = Akamai::rmdir('/cpcode/path/to/file/');
+    $deleteResponse = Akamai::delete('/cpcode/newpath/to/file/new_testing.mp4');
 
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $mkdirResponse = Akamai::mkdir('/cpcode/new_dir');
+
+    /** @var array - ['data' => "could be simple string or xml string",'code' => 200] */
+    $rmdirResponse = Akamai::rmdir('/cpcode/new_dir');
 
     $token = Token::generateVideoToken(100, "hdnts");
     var_dump($token);

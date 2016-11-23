@@ -15,5 +15,9 @@ interface AkamaiInterface
     
     public function rmdir($url);
 
+    public function mkdir($url);
+
+    public function rename($url, $destination);
+
     public function generateToken($duration, $type);
 }

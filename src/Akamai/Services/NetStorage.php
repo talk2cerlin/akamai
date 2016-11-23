@@ -107,22 +107,22 @@ class NetStorage
 
     protected function mtime($url, $time)
     {
-        $this->_updateAction('mtime', $url, array('mtime' => $time));
+        return $this->_updateAction('mtime', $url, array('mtime' => $time));
     }
 
     protected function rename($url, $destination)
     {
-        $this->_updateAction('rename', $url, array('destination' => $destination));
+        return $this->_updateAction('rename', $url, array('destination' => $destination));
     }
 
     protected function symlink($url, $target)
     {
-        $this->_updateAction('symlink', $url, array('target' => $target));
+        return $this->_updateAction('symlink', $url, array('target' => $target));
     }
 
     protected function mkdir($url)
     {
-        $this->_updateAction('mkdir', $url);
+        return $this->_updateAction('mkdir', $url);
     }
 
     protected function rmdir($url)
