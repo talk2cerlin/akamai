@@ -11,11 +11,8 @@ class AkamaiAuth
     public $key_name;
     public $client;
     public $server;
-    public $time;
     public $unique_id;
     public $version = 5;
-
-    private $_data;
 
     public function __construct($key, $key_name, $version = 5)
     {
@@ -23,7 +20,6 @@ class AkamaiAuth
         $this->key_name = $key_name;
         $this->client   = '0.0.0.0';
         $this->server   = '0.0.0.0';
-        $this->time = time();
         $this->unique_id = mt_rand(1000000000, 9999999999);
         $this->version   = $version;
 
@@ -31,17 +27,14 @@ class AkamaiAuth
 
     public function getAuthData()
     {
-        if (!$this->_data) {
-            $this->_data = implode(', ', array(
-                $this->version,
-                $this->server,
-                $this->client,
-                $this->time,
-                $this->unique_id,
-                $this->key_name
-            ));
-        }
-        return $this->_data;
+        return implode(', ', array(
+            $this->version,
+            $this->server,
+            $this->client,
+            time(),
+            $this->unique_id,
+            $this->key_name
+        ));
     }
 
     public function getAuthSign($uri, $action)
